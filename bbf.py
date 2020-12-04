@@ -59,7 +59,8 @@ if "__main__"==__name__ :
 			mode=modality[marg]
 			arg=arg+i
 	#for
-	print("[DEBUG] mode="+mode);
+	if debugga==1:
+		print("[DEBUG] mode="+mode);
 	if mode==modality[mstdin] :
 		if debugga==1:
 			print("[DEBUG] input mode");
