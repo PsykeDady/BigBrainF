@@ -5,7 +5,7 @@
 #
 # Author  = Davide Galati (aka PsykeDady)
 # email   = psdady@msn.com
-# version = 0.1
+# version = 0.2
 ######################################################################
 # This program is free software: you can redistribute it and/or modify
 #     it under the terms of the GNU General Public License as published by
@@ -22,6 +22,28 @@
 
 import sys
 
+def nextBracket(s, n1):
+	b1, b2 = ']', '['
+	if s[n1] == ']':
+		b1, b2 = b2, b1
+		s = s[::-1]
+		n1 = len(s) - n1
+	n2 = n1
+
+	#finché non vengono trovate tante parentesi aperte quante chiuse-
+	#cicla e arriva a quella interessata
+	while n1 < len(s) and n1 >= n2:
+		try: n1 = s.index(b1,n1 + 1)
+		except: n1 = len(s) #va alla fine del programma se non c'è una parentesi
+		try: n2 = s.index(b2,n2 + 1)
+		except:
+			#non ci sono altre parentesi aperte, può uscire direttamente dal ciclo
+			# n2 = len(s)
+			break
+	#while
+	return n1 if b1 == ']' else len(s) - n1
+#nextBracket
+
 def b2t(s):
         data=[0]*len(s) #caso peggiore
         ptr=0
@@ -29,8 +51,10 @@ def b2t(s):
         ris=""
         while n < len(s):
                 i=s[n]
-                try: n= s.index(']',n) if i=='[' and data[ptr]==0  else len(s)-s[::-1].index('[',len(s)-n) if i==']' and data[ptr]!=0 else  n+1 
-                except: pass
+                if (i=='[' and data[ptr] == 0) or (i==']' and data[ptr] != 0):
+                    n = nextBracket(s, n)
+                else:
+                    n += 1
                 ptr=ptr+1 if i=='>' else ptr-1 if  i=='<'  else ptr
                 data[ptr]= data[ptr]+1 if i=='+' else data[ptr]-1 if i=='-' else ord(input()[0])-ord('0') if i==',' else data[ptr]
                 if i=='.': ris=ris+chr(data[ptr])
@@ -70,4 +94,3 @@ if "__main__"==__name__ :
 
 	print(b2t(arg));
 #main
-
